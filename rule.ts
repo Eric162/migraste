@@ -3,7 +3,6 @@ import { NapiConfig, Rule, Lang } from "@ast-grep/napi"
 export const SOURCE = "SOURCE"
 export const ORIGINAL_NAME = "ORIGINAL_NAME"
 export const NAME = "NAME"
-export const ALIAS = "ALIAS"
 
 enum Utils {
     aliasImport = "aliasImport",
@@ -17,7 +16,7 @@ const utils = {
             {
                 has: {
                     kind: "identifier",
-                    pattern: `$${ALIAS}`,
+                    pattern: `$${NAME}`,
                     field: "alias",
                 },
             },

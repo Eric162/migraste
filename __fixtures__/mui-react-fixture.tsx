@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
-import { Input, Button as CorrectButton } from "@prep/design-system";
+import { Input, Button as AliasedButton } from "@prep/design-system";
+import AnotherButton from "@prep/design-system/Button";
 
 const MyComponent: React.FC = () => {
     return (
@@ -7,7 +8,8 @@ const MyComponent: React.FC = () => {
             <Button>Click Me</Button>
             <Input />
             <Button>Click Me</Button>
-            <CorrectButton> MATCH </CorrectButton>
+            <AliasedButton> MATCH </AliasedButton>
+            <AnotherButton> ANOTHER MATCH </AnotherButton>
         </>
     )
 }

@@ -1,5 +1,5 @@
 
-import { getCounterRule, SOURCE, ORIGINAL_NAME, NAME, ALIAS } from "./rule"
+import { getCounterRule, SOURCE, ORIGINAL_NAME, NAME } from "./rule"
 import { findInFiles, Lang } from "@ast-grep/napi"
 
 
@@ -28,15 +28,16 @@ import { findInFiles, Lang } from "@ast-grep/napi"
         console.table(results.map((result) => {
             const source = result.getMatch(SOURCE)?.text();
             const originalName = result.getMatch(ORIGINAL_NAME)?.text();
-            const name = result.getMatch(NAME)?.text();
-            const alias = result.getMatch(ALIAS)?.text();
+            const nameOrAlias = result.getMatch(NAME)?.text();
+
+            const name = originalName ?? nameOrAlias;
+            const alias = originalName ? nameOrAlias : undefined;
 
             return {
                 fileName,
                 source,
                 name,
                 alias,
-                originalName,
             }
         }))
 
