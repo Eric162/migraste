@@ -1,5 +1,5 @@
 
-import { getCounterRule } from "./rule"
+import { getCounterRule, SOURCE, ORIGINAL_NAME, NAME, ALIAS } from "./rule"
 import { findInFiles, Lang } from "@ast-grep/napi"
 
 
@@ -21,13 +21,35 @@ import { findInFiles, Lang } from "@ast-grep/napi"
     }, (err, results) => {
         if (err) {
             console.error(err)
+            return;
         }
 
-        results.forEach((result) => {
-            console.log("ORIGINAL_NAME", result.getMatch("ORIGINAL_NAME")?.text())
-            console.log("NAME", result.getMatch("NAME")?.text())
-            console.log("ALIAS", result.getMatch("ALIAS")?.text())
-            console.log("SOURCE", result.getMatch("SOURCE")?.text())
-        })
+        const fileName = results[0].getRoot().filename();
+        console.table(results.map((result) => {
+            const source = result.getMatch(SOURCE)?.text();
+            const originalName = result.getMatch(ORIGINAL_NAME)?.text();
+            const name = result.getMatch(NAME)?.text();
+            const alias = result.getMatch(ALIAS)?.text();
+
+            return {
+                fileName,
+                source,
+                name,
+                alias,
+                originalName,
+            }
+        }))
+
+        // for (const result of results) {
+        //     const source = result.getMatch("SOURCE")?.text();
+        //     const originalName = result.getMatch("ORIGINAL_NAME")?.text();
+        //     const name = result.getMatch("NAME")?.text();
+        //     const alias = result.getMatch("ALIAS")?.text();
+
+        //     console.log("ORIGINAL_NAME", originalName)
+        //     console.log("NAME", name)
+        //     console.log("ALIAS", alias)
+        //     console.log("SOURCE", source)
+        // }
     })
 })()
