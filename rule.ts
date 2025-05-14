@@ -1,5 +1,52 @@
-
 import { NapiConfig, Rule, Lang } from "@ast-grep/napi"
+
+export const SOURCE = "SOURCE"
+export const ORIGINAL_NAME = "ORIGINAL_NAME"
+export const NAME = "NAME"
+export const ALIAS = "ALIAS"
+
+enum Utils {
+    aliasImport = "aliasImport",
+    namedImport = "namedImport",
+    defaultImport = "defaultImport",
+}
+
+const utils = {
+    [Utils.aliasImport]: {
+        all: [
+            {
+                has: {
+                    kind: "identifier",
+                    pattern: `$${ALIAS}`,
+                    field: "alias",
+                },
+            },
+            {
+                has: {
+                    kind: "identifier",
+                    pattern: `$${ORIGINAL_NAME}`,
+                    field: "name",
+                },
+            },
+        ],
+    },
+    [Utils.namedImport]: {
+        has: {
+            kind: "identifier",
+            pattern: `$${NAME}`,
+            field: "name",
+        },
+    },
+    [Utils.defaultImport]: {
+        has: {
+            kind: "import_clause",
+            has: {
+                kind: "identifier",
+                pattern: `$${NAME}`,
+            },
+        },
+    },
+}
 
 export function getCounterRule({
     importOriginalNameRegex,
@@ -9,29 +56,10 @@ export function getCounterRule({
     importSourceRustRegex?: string,
 } = {}): NapiConfig {
     return {
-        utils: {
-            isAliasImport: {
-                all: [
-                    {
-                        has: {
-                            kind: "identifier",
-                            pattern: "$ALIAS",
-                            field: "alias",
-                        },
-                    },
-                    {
-                        has: {
-                            kind: "identifier",
-                            pattern: "$ORIGINAL_NAME",
-                            field: "name",
-                        },
-                    },
-                ],
-            }
-        },
+        utils,
         rule: {
             kind: "identifier",
-            pattern: "$NAME",
+            pattern: `$${NAME}`,
             regex: importOriginalNameRegex,
             inside: {
                 any: [
@@ -43,29 +71,36 @@ export function getCounterRule({
                     stopBy: "end",
                     has: {
                         kind: "import_statement",
-                        regex: importSourceRustRegex,
-                        has: {
-                            kind: "import_clause",
+                        all: [{
+                            regex: importSourceRustRegex,
                             has: {
-                                // TODO also support default import
-                                kind: "named_imports",
+                                kind: "string",
+                                stopBy: "end",
                                 has: {
-                                    kind: "import_specifier",
-                                    any: [
-                                        {
-                                            has: {
-                                                kind: "identifier",
-                                                pattern: "$NAME",
-                                                field: "name",
-                                            },
-                                        },
-                                        {
-                                            matches: "isAliasImport"
-                                        }
-                                    ],
+                                    kind: "string_fragment",
+                                    pattern: `$${SOURCE}`,
+                                }
+                            }
+                        }, {
+                            any: [
+                                {
+                                    matches: "defaultImport"
                                 },
-                            },
-                        },
+                                {
+                                    has: {
+                                        kind: "import_specifier",
+                                        stopBy: "end",
+                                        any: [
+                                            {
+                                                matches: "namedImport"
+                                            },
+                                            {
+                                                matches: "aliasImport"
+                                            }
+                                        ],
+                                    }
+                                }]
+                        }]
                     },
                 },
             },
