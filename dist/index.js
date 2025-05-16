@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var _napi = require("@ast-grep/napi");
+var _rule = require("./rule");
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -119,15 +125,13 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
-import { Lang, findInFiles } from "@ast-grep/napi";
-import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
 (function() {
     return _async_to_generator(function() {
         var rule, dir;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    rule = getCounterRule({
+                    rule = (0, _rule.getCounterRule)({
                         importSourceRustRegex: "@mui/material|@prep/design-system"
                     });
                     // get dir from args
@@ -135,7 +139,7 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
                     console.log("Matching files in", dir);
                     return [
                         4,
-                        findInFiles(Lang.Tsx, {
+                        (0, _napi.findInFiles)(_napi.Lang.Tsx, {
                             paths: [
                                 dir
                             ],
@@ -148,9 +152,9 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
                             var fileName = results[0].getRoot().filename();
                             console.table(results.map(function(result) {
                                 var _result_getMatch, _result_getMatch1, _result_getMatch2;
-                                var source = (_result_getMatch = result.getMatch(SOURCE)) === null || _result_getMatch === void 0 ? void 0 : _result_getMatch.text();
-                                var originalName = (_result_getMatch1 = result.getMatch(ORIGINAL_NAME)) === null || _result_getMatch1 === void 0 ? void 0 : _result_getMatch1.text();
-                                var nameOrAlias = (_result_getMatch2 = result.getMatch(NAME)) === null || _result_getMatch2 === void 0 ? void 0 : _result_getMatch2.text();
+                                var source = (_result_getMatch = result.getMatch(_rule.SOURCE)) === null || _result_getMatch === void 0 ? void 0 : _result_getMatch.text();
+                                var originalName = (_result_getMatch1 = result.getMatch(_rule.ORIGINAL_NAME)) === null || _result_getMatch1 === void 0 ? void 0 : _result_getMatch1.text();
+                                var nameOrAlias = (_result_getMatch2 = result.getMatch(_rule.NAME)) === null || _result_getMatch2 === void 0 ? void 0 : _result_getMatch2.text();
                                 var name = originalName !== null && originalName !== void 0 ? originalName : nameOrAlias;
                                 var alias = originalName ? nameOrAlias : undefined;
                                 return {

@@ -1,9 +1,9 @@
 # Build the project
 pnpm run build
 
-# Check if dist/index.js was modified by the build
-if ! git diff --quiet --exit-code dist/index.js; then
-  echo "Error: index.ts was not built before committing. Please build and stage the changes in dist/index.js."
+# Check if the dist directory was modified by the build
+if ! git diff --quiet --exit-code dist/; then
+  echo "Error: The dist directory was not built or changes were not staged before committing. Please build and stage the changes in the dist/ directory."
   exit 1
 fi
 
