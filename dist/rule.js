@@ -43,6 +43,7 @@ var Utils = /*#__PURE__*/ function(Utils) {
     Utils["aliasImport"] = "aliasImport";
     Utils["namedImport"] = "namedImport";
     Utils["defaultImport"] = "defaultImport";
+    Utils["shortHandDestructure"] = "shortHandDestructure";
     return Utils;
 }(Utils || {});
 var _obj;
@@ -75,6 +76,18 @@ var utils = (_obj = {}, _define_property(_obj, "aliasImport", {
         has: {
             kind: "identifier",
             pattern: "$".concat(NAME)
+        }
+    }
+}), _define_property(_obj, "shortHandDestructure", {
+    has: {
+        kind: "shorthand_property_identifier_pattern",
+        stopBy: "end",
+        pattern: "$".concat(NAME),
+        inside: {
+            kind: "variable_declarator",
+            stopBy: {
+                kind: "object_pattern"
+            }
         }
     }
 }), _obj);
@@ -129,6 +142,15 @@ function getCounterRule() {
                                                     matches: "aliasImport"
                                                 }
                                             ]
+                                        }
+                                    },
+                                    {
+                                        has: {
+                                            kind: "namespace_import",
+                                            stopBy: "end",
+                                            has: {
+                                                kind: "identifier"
+                                            }
                                         }
                                     }
                                 ]

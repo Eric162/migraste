@@ -1,4 +1,5 @@
-import { Lang, type NapiConfig, Rule } from "@ast-grep/napi";
+import { Lang, type NapiConfig, type Rule } from "@ast-grep/napi";
+import type { TypesMap } from "@ast-grep/napi/types/staticTypes";
 
 export const SOURCE = "SOURCE";
 export const ORIGINAL_NAME = "ORIGINAL_NAME";
@@ -8,9 +9,10 @@ enum Utils {
 	aliasImport = "aliasImport",
 	namedImport = "namedImport",
 	defaultImport = "defaultImport",
+	shortHandDestructure = "shortHandDestructure",
 }
 
-const utils = {
+const utils: Record<string, Rule<TypesMap>> = {
 	[Utils.aliasImport]: {
 		all: [
 			{
@@ -42,6 +44,19 @@ const utils = {
 			has: {
 				kind: "identifier",
 				pattern: `$${NAME}`,
+			},
+		},
+	},
+	[Utils.shortHandDestructure]: {
+		has: {
+			kind: "shorthand_property_identifier_pattern",
+			stopBy: "end",
+			pattern: `$${NAME}`,
+			inside: {
+				kind: "variable_declarator",
+				stopBy: {
+					kind: "object_pattern",
+				},
 			},
 		},
 	},
@@ -99,6 +114,15 @@ export function getCounterRule({
 													matches: "aliasImport",
 												},
 											],
+										},
+									},
+									{
+										has: {
+											kind: "namespace_import",
+											stopBy: "end",
+											has: {
+												kind: "identifier",
+											},
 										},
 									},
 								],
