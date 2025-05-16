@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Build the project
+pnpm run build
+
+# Check if dist/index.js was modified by the build
+if ! git diff --quiet --exit-code dist/index.js; then
+  echo "Error: index.ts was not built before committing. Please build and stage the changes in dist/index.js."
+  exit 1
+fi
+
+exit 0
