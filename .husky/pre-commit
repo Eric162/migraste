@@ -1,4 +1,8 @@
 # Build the project
+
+# check formatting and types
+pnpm run check
+
 pnpm run build
 
 # Check if the dist directory was modified by the build
