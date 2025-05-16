@@ -8,7 +8,7 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
 	});
 
 	// get dir from args
-	const dir = process.argv[2];
+	const dir = process.argv[2] || ".";
 
 	console.log("Matching files in", dir);
 

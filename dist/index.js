@@ -135,7 +135,7 @@ function _ts_generator(thisArg, body) {
                         importSourceRustRegex: "@mui/material|@prep/design-system"
                     });
                     // get dir from args
-                    dir = process.argv[2];
+                    dir = process.argv[2] || ".";
                     console.log("Matching files in", dir);
                     return [
                         4,
