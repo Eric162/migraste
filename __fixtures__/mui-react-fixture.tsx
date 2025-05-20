@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Table } from "@mui/material";
 import * as mui from "@mui/material";
 import { Button as AliasedButton, Input } from "@prep/design-system";
 import AnotherButton from "@prep/design-system/Button";
@@ -14,6 +14,11 @@ const MyComponent: React.FC = () => {
 			<AliasedButton> MATCH </AliasedButton>
 			<AnotherButton> ANOTHER MATCH </AnotherButton>
 			<DestructuredButton> DESTRUCTURING MATCH </DestructuredButton>
+			<Table.Root>
+				<Table.Body>
+					<Table.Footer />
+				</Table.Body>
+			</Table.Root>
 		</>
 	);
 };

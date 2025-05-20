@@ -136,7 +136,6 @@ function _ts_generator(thisArg, body) {
                     });
                     // get dir from args
                     dir = process.argv[2] || ".";
-                    console.log("Matching files in", dir);
                     return [
                         4,
                         (0, _napi.findInFiles)(_napi.Lang.Tsx, {
@@ -155,6 +154,7 @@ function _ts_generator(thisArg, body) {
                                 var source = (_result_getMatch = result.getMatch(_rule.SOURCE)) === null || _result_getMatch === void 0 ? void 0 : _result_getMatch.text();
                                 var originalName = (_result_getMatch1 = result.getMatch(_rule.ORIGINAL_NAME)) === null || _result_getMatch1 === void 0 ? void 0 : _result_getMatch1.text();
                                 var nameOrAlias = (_result_getMatch2 = result.getMatch(_rule.NAME)) === null || _result_getMatch2 === void 0 ? void 0 : _result_getMatch2.text();
+                                console.log(source, originalName, nameOrAlias);
                                 var name = originalName !== null && originalName !== void 0 ? originalName : nameOrAlias;
                                 var alias = originalName ? nameOrAlias : undefined;
                                 return {

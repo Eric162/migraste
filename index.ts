@@ -10,8 +10,6 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
 	// get dir from args
 	const dir = process.argv[2] || ".";
 
-	console.log("Matching files in", dir);
-
 	await findInFiles(
 		Lang.Tsx,
 		{
@@ -30,6 +28,7 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
 					const source = result.getMatch(SOURCE)?.text();
 					const originalName = result.getMatch(ORIGINAL_NAME)?.text();
 					const nameOrAlias = result.getMatch(NAME)?.text();
+					console.log(source, originalName, nameOrAlias);
 
 					const name = originalName ?? nameOrAlias;
 					const alias = originalName ? nameOrAlias : undefined;

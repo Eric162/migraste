@@ -44,6 +44,7 @@ var Utils = /*#__PURE__*/ function(Utils) {
     Utils["namedImport"] = "namedImport";
     Utils["defaultImport"] = "defaultImport";
     Utils["shortHandDestructure"] = "shortHandDestructure";
+    Utils["jsxInvokation"] = "jsxInvokation";
     return Utils;
 }(Utils || {});
 var _obj;
@@ -90,6 +91,15 @@ var utils = (_obj = {}, _define_property(_obj, "aliasImport", {
             }
         }
     }
+}), _define_property(_obj, "jsxInvokation", {
+    any: [
+        {
+            kind: "jsx_opening_element"
+        },
+        {
+            kind: "jsx_self_closing_element"
+        }
+    ]
 }), _obj);
 function getCounterRule() {
     var _ref = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}, importOriginalNameRegex = _ref.importOriginalNameRegex, importSourceRustRegex = _ref.importSourceRustRegex;
@@ -99,66 +109,70 @@ function getCounterRule() {
             kind: "identifier",
             pattern: "$".concat(NAME),
             regex: importOriginalNameRegex,
-            inside: {
-                any: [
-                    {
-                        kind: "jsx_opening_element"
-                    },
-                    {
-                        kind: "jsx_self_closing_element"
-                    }
-                ],
-                inside: {
-                    kind: "program",
-                    stopBy: "end",
-                    has: {
-                        kind: "import_statement",
-                        all: [
+            all: [
+                {
+                    inside: {
+                        any: [
                             {
-                                regex: importSourceRustRegex,
-                                has: {
-                                    kind: "string",
-                                    stopBy: "end",
-                                    has: {
-                                        kind: "string_fragment",
-                                        pattern: "$".concat(SOURCE)
-                                    }
-                                }
+                                matches: "jsxInvokation"
                             },
                             {
-                                any: [
-                                    {
-                                        matches: "defaultImport"
-                                    },
-                                    {
-                                        has: {
-                                            kind: "import_specifier",
-                                            stopBy: "end",
-                                            any: [
-                                                {
-                                                    matches: "namedImport"
-                                                },
-                                                {
-                                                    matches: "aliasImport"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        has: {
-                                            kind: "namespace_import",
-                                            stopBy: "end",
-                                            has: {
-                                                kind: "identifier"
-                                            }
-                                        }
-                                    }
-                                ]
+                                kind: "member_expression",
+                                inside: {
+                                    matches: "jsxInvokation"
+                                }
                             }
                         ]
                     }
+                },
+                {
+                    inside: {
+                        kind: "program",
+                        stopBy: "end",
+                        has: {
+                            kind: "import_statement",
+                            all: [
+                                {
+                                    regex: importSourceRustRegex,
+                                    has: {
+                                        kind: "string",
+                                        stopBy: "end",
+                                        has: {
+                                            kind: "string_fragment",
+                                            pattern: "$".concat(SOURCE)
+                                        }
+                                    }
+                                },
+                                {
+                                    any: [
+                                        {
+                                            matches: "defaultImport"
+                                        },
+                                        {
+                                            has: {
+                                                kind: "named_imports",
+                                                stopBy: "end",
+                                                has: {
+                                                    kind: "import_specifier",
+                                                    stopBy: "end",
+                                                    any: [
+                                                        {
+                                                            matches: "namedImport"
+                                                        },
+                                                        {
+                                                            matches: "aliasImport"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
                 }
-            }
+            ]
         },
         language: _napi.Lang.Tsx
     };

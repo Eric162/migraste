@@ -10,6 +10,7 @@ enum Utils {
 	namedImport = "namedImport",
 	defaultImport = "defaultImport",
 	shortHandDestructure = "shortHandDestructure",
+	jsxInvokation = "jsxInvokation",
 }
 
 const utils: Record<string, Rule<TypesMap>> = {
@@ -60,6 +61,12 @@ const utils: Record<string, Rule<TypesMap>> = {
 			},
 		},
 	},
+	[Utils.jsxInvokation]: {
+		any: [
+			{ kind: "jsx_opening_element" },
+			{ kind: "jsx_self_closing_element" },
+		],
+	},
 };
 
 export function getCounterRule({
@@ -75,62 +82,70 @@ export function getCounterRule({
 			kind: "identifier",
 			pattern: `$${NAME}`,
 			regex: importOriginalNameRegex,
-			inside: {
-				any: [
-					{ kind: "jsx_opening_element" },
-					{ kind: "jsx_self_closing_element" },
-				],
-				inside: {
-					kind: "program",
-					stopBy: "end",
-					has: {
-						kind: "import_statement",
-						all: [
+			all: [
+				{
+					inside: {
+						any: [
 							{
-								regex: importSourceRustRegex,
-								has: {
-									kind: "string",
-									stopBy: "end",
-									has: {
-										kind: "string_fragment",
-										pattern: `$${SOURCE}`,
-									},
-								},
+								matches: Utils.jsxInvokation,
 							},
 							{
-								any: [
-									{
-										matches: "defaultImport",
-									},
-									{
-										has: {
-											kind: "import_specifier",
-											stopBy: "end",
-											any: [
-												{
-													matches: "namedImport",
-												},
-												{
-													matches: "aliasImport",
-												},
-											],
-										},
-									},
-									{
-										has: {
-											kind: "namespace_import",
-											stopBy: "end",
-											has: {
-												kind: "identifier",
-											},
-										},
-									},
-								],
+								kind: "member_expression",
+								inside: {
+									matches: Utils.jsxInvokation,
+								},
 							},
 						],
 					},
 				},
-			},
+				{
+					inside: {
+						kind: "program",
+						stopBy: "end",
+						has: {
+							kind: "import_statement",
+							all: [
+								{
+									regex: importSourceRustRegex,
+									has: {
+										kind: "string",
+										stopBy: "end",
+										has: {
+											kind: "string_fragment",
+											pattern: `$${SOURCE}`,
+										},
+									},
+								},
+								{
+									any: [
+										{
+											matches: Utils.defaultImport,
+										},
+										{
+											has: {
+												kind: "named_imports",
+												stopBy: "end",
+												has: {
+													kind: "import_specifier",
+													stopBy: "end",
+													any: [
+														{
+															matches: Utils.namedImport,
+														},
+														{
+															matches: Utils.aliasImport,
+														},
+													],
+												},
+											},
+										},
+									],
+								},
+							],
+						},
+					},
+				},
+			],
 		},
 		language: Lang.Tsx,
 	};
