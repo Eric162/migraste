@@ -150,18 +150,19 @@ function _ts_generator(thisArg, body) {
                             }
                             var fileName = results[0].getRoot().filename();
                             console.table(results.map(function(result) {
-                                var _result_getMatch, _result_getMatch1, _result_getMatch2;
+                                var _result_getMatch, _result_getMatch1, _result_getMatch2, _result_getMatch3;
                                 var source = (_result_getMatch = result.getMatch(_rule.SOURCE)) === null || _result_getMatch === void 0 ? void 0 : _result_getMatch.text();
                                 var originalName = (_result_getMatch1 = result.getMatch(_rule.ORIGINAL_NAME)) === null || _result_getMatch1 === void 0 ? void 0 : _result_getMatch1.text();
                                 var nameOrAlias = (_result_getMatch2 = result.getMatch(_rule.NAME)) === null || _result_getMatch2 === void 0 ? void 0 : _result_getMatch2.text();
-                                console.log(source, originalName, nameOrAlias);
+                                var propertyName = (_result_getMatch3 = result.getMatch(_rule.PROPERTY_NAME)) === null || _result_getMatch3 === void 0 ? void 0 : _result_getMatch3.text();
                                 var name = originalName !== null && originalName !== void 0 ? originalName : nameOrAlias;
                                 var alias = originalName ? nameOrAlias : undefined;
                                 return {
                                     fileName: fileName,
                                     source: source,
                                     name: name,
-                                    alias: alias
+                                    alias: alias,
+                                    propertyName: propertyName
                                 };
                             }));
                         // for (const result of results) {

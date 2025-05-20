@@ -4,6 +4,7 @@ import type { TypesMap } from "@ast-grep/napi/types/staticTypes";
 export const SOURCE = "SOURCE";
 export const ORIGINAL_NAME = "ORIGINAL_NAME";
 export const NAME = "NAME";
+export const PROPERTY_NAME = "PROPERTY_NAME";
 
 enum Utils {
 	aliasImport = "aliasImport",
@@ -91,6 +92,11 @@ export function getCounterRule({
 							},
 							{
 								kind: "member_expression",
+								has: {
+									kind: "property_identifier",
+									pattern: `$${PROPERTY_NAME}`,
+									stopBy: "end",
+								},
 								inside: {
 									matches: Utils.jsxInvokation,
 								},

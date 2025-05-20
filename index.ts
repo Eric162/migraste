@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import { Lang, findInFiles } from "@ast-grep/napi";
-import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
+import {
+	NAME,
+	ORIGINAL_NAME,
+	PROPERTY_NAME,
+	SOURCE,
+	getCounterRule,
+} from "./rule";
 
 (async () => {
 	const rule = getCounterRule({
@@ -28,7 +34,7 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
 					const source = result.getMatch(SOURCE)?.text();
 					const originalName = result.getMatch(ORIGINAL_NAME)?.text();
 					const nameOrAlias = result.getMatch(NAME)?.text();
-					console.log(source, originalName, nameOrAlias);
+					const propertyName = result.getMatch(PROPERTY_NAME)?.text();
 
 					const name = originalName ?? nameOrAlias;
 					const alias = originalName ? nameOrAlias : undefined;
@@ -38,6 +44,7 @@ import { NAME, ORIGINAL_NAME, SOURCE, getCounterRule } from "./rule";
 						source,
 						name,
 						alias,
+						propertyName,
 					};
 				}),
 			);

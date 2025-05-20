@@ -15,6 +15,9 @@ _export(exports, {
     ORIGINAL_NAME: function() {
         return ORIGINAL_NAME;
     },
+    PROPERTY_NAME: function() {
+        return PROPERTY_NAME;
+    },
     SOURCE: function() {
         return SOURCE;
     },
@@ -39,6 +42,7 @@ function _define_property(obj, key, value) {
 var SOURCE = "SOURCE";
 var ORIGINAL_NAME = "ORIGINAL_NAME";
 var NAME = "NAME";
+var PROPERTY_NAME = "PROPERTY_NAME";
 var Utils = /*#__PURE__*/ function(Utils) {
     Utils["aliasImport"] = "aliasImport";
     Utils["namedImport"] = "namedImport";
@@ -118,6 +122,11 @@ function getCounterRule() {
                             },
                             {
                                 kind: "member_expression",
+                                has: {
+                                    kind: "property_identifier",
+                                    pattern: "$".concat(PROPERTY_NAME),
+                                    stopBy: "end"
+                                },
                                 inside: {
                                     matches: "jsxInvokation"
                                 }
